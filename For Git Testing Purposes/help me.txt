@@ -1,0 +1,147 @@
+`timescale 1ns / 1ps
+
+////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer:
+//
+// Create Date:   16:07:02 03/10/2017
+// Design Name:   top
+// Module Name:   U:/win/Desktop/Lab 6/Lab7/top_tb.v
+// Project Name:  Lab7
+// Target Device:  
+// Tool versions:  
+// Description: 
+//
+// Verilog Test Fixture created by ISE for module: top
+//
+// Dependencies:
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+////////////////////////////////////////////////////////////////////////////////
+
+module top_tb;
+
+	// Inputs
+	reg winrnd;
+	reg rand;
+	reg clk;
+	reg rst;
+	reg slowenable;
+
+	// Outputs
+	wire leds_on;
+	wire [1:0] leds_control;
+	wire clear;
+	wire rout;
+
+	// Bidirs
+	wire slowen;
+
+	// Instantiate the Unit Under Test (UUT)
+	top uut (
+		.winrnd(winrnd), 
+		.rand(rand), 
+		.slowen(slowen), 
+		.clk(clk), 
+		.rst(rst), 
+		.leds_on(leds_on), 
+		.leds_control(leds_control), 
+		.clear(clear), 
+		.rout(rout), 
+		.slowenable(slowenable)
+	);
+   always #976563 clk <= ~clk;
+	initial begin
+		// Initialize Inputs
+		winrnd = 0;
+		rand = 0;
+		clk = 0;
+		rst = 0;
+		slowenable = 0;
+		// reset
+		#100
+		// Add stimulus here
+		
+		@(posedge clk); #1;
+		rst = 1;
+		@(posedge clk); #1;
+		rst = 0;
+		leds_on = 1;
+		clear = 1;
+		leds_control = 2'b11;
+		
+		//move to Dark from reset
+		
+		// wait a
+		@(posedge clk); #1;
+		rst = 0;
+		leds_on = 1;
+		clear = 1;
+		leds_control = 2'b11;
+		
+		//wait b
+		always #976563 clk =~ clk;
+		@(posedge clk); #1;
+		rst = 0;
+		leds_on = 1;
+		clear = 1;
+		leds_control = 2'b11;
+		
+		//At Dark
+		@(posedge clk); #1;
+		rst = 0;
+		leds_on = 0;
+		clear = 0;
+		leds_control = 2'b00;
+		
+		//To Play
+		rand =1;
+		@(posedge clk); #1;
+		rst = 0;
+		leds_on = 0;
+		clear = 1;
+		leds_control = 2'b01;
+		
+		//Play to Gloat a
+		
+		winrnd = 1;
+		
+		@(posedge clk); #1;
+		rst = 0;
+		leds_on = 1;
+		clear = 1;
+		leds_control = 2'b01;
+		
+		//To Gloat B
+		
+		@(posedge clk); #1;
+		rst = 0;
+		leds_on = 1;
+		clear = 1;
+		leds_control = 2'b01;		
+		
+		//Back to Dark
+		@(posedge clk); #1;
+		rst = 0;
+		leds_on = 0;
+		clear = 0;
+		leds_control = 2'b00;	
+		
+		//To gloat A with winrnd
+		
+		winrnd = 1;
+		@(posedge clk); #1;
+		rst = 0;
+		leds_on = 1;
+		clear = 1;
+		leds_control = 2'b01;
+
+		
+
+	end
+      
+endmodule
+
